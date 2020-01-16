@@ -1,0 +1,35 @@
+---
+title: "Individual Assignment"
+output: html_notebook
+---
+
+
+
+```{r}
+library(tidyverse)
+
+# Assign the csv file to a variable, and filter for the correct year
+IraqData <- read.csv("IraqCSV.csv") %>% 
+  filter (Year == '2006')
+
+#Assign the sum of all entries to a new variable
+summarizedIraq <- summarize(IraqData, total = sum(Best_est_deaths))
+
+print(summarizedIraq)
+
+```
+```{r}
+
+# Plot bar graph for 
+ggplot(data = summarizedIraq) +
+  geom_bar( mapping = aes (
+    x = 'Iraq, 2006', y = total +
+      # Add titles
+      ylab ('Total number of deaths') +
+      ggtitle ("Total estimated deaths in Iraq in 2006")
+                           )) 
+  
+
+
+```
+
