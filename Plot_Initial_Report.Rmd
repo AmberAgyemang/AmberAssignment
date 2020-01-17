@@ -8,28 +8,32 @@ output: html_notebook
 ```{r}
 library(tidyverse)
 
-# Assign the csv file to a variable, and filter for the correct year
+# Assign the csv file to a new variable
 IraqData <- read.csv("IraqCSV.csv") %>% 
-  filter (Year == '2006')
+  #Select for only the year and estimated casualties
+  select(Year, Best_est_deaths) %>%
+  #filter for the correct year
+  filter (Year %in% c('2000', '2001', '2002', '2003', '2004', '2005', '2006' ))
 
-#Assign the sum of all entries to a new variable
-summarizedIraq <- summarize(IraqData, total = sum(Best_est_deaths))
 
-print(summarizedIraq)
+# Assign a new variable
+SummarizedIraq <- IraqData %>%
+  # Group the data set per year
+  group_by(Year) %>%
+  # Calculate the sum of the estimated deaths per year
+  summarise(total = sum(Best_est_deaths))
 
-```
-```{r}
+# Plot the data in a barplot
+ggplot(data = SummarizedIraq) +
+  # Add the geoms
+  geom_col(mapping = aes( x = Year, y = total)) +
+  # Adding y lable
+  ylab('Total deaths') +
+  # Adding a title
+  ggtitle('Total estimated deaths per year in Iraq')
 
-# Plot bar graph for 
-ggplot(data = summarizedIraq) +
-  geom_bar( mapping = aes (
-    x = 'Iraq, 2006', y = total +
-      # Add titles
-      ylab ('Total number of deaths') +
-      ggtitle ("Total estimated deaths in Iraq in 2006")
-                           )) 
+
   
-
 
 ```
 
